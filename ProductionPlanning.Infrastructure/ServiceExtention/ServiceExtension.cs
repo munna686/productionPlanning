@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using ProductionPlanning.Core.Interfaces;
 using ProductionPlanning.Core.Model;
 using ProductionPlanning.Infrastructure.DbContext;
 using ProductionPlanning.Infrastructure.Repos;
 using ProductionPlanning.Service.Interface;
 using ProductionPlanning.Service.Services;
+using System.Text;
 
 namespace ProductionPlanning.Infrastructure.ServiceExtention
 {
@@ -41,7 +44,33 @@ namespace ProductionPlanning.Infrastructure.ServiceExtention
             //Add Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IJwtService, JwtService>();
 
+            // Add Authentication and JWT Configuration
+            // Add Authentication with JWT Bearer
+            var jwtSettings = configuration.GetSection("Jwt");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                };
+            });
+
+            // Add Authorization
+            services.AddAuthorization();
+
+            services.AddControllers();
             return services;
         }
     }

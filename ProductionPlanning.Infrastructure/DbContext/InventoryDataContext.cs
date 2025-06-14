@@ -22,7 +22,7 @@ namespace ProductionPlanning.Infrastructure.DbContext
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=InvDbMaster;User ID=sa;Password=68662;TrustServerCertificate=true;");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PPDB;User ID=sa;Password=68662;TrustServerCertificate=true;");
         }
     }
 }

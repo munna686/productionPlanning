@@ -10,6 +10,7 @@ namespace ProductionPlanning.Service.Interface
     public interface IUserService
     {
         Task<ServiceResponse> Login(LoginDTO dto);
+        Task<ServiceResponse> getAllUser();
         Task<ServiceResponse> Logout();
         Task<ServiceResponse> CreateUser(AddUserDTO dto);
     }
