@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProductionPlanning.Core.Model
@@ -14,11 +15,14 @@ namespace ProductionPlanning.Core.Model
 
         public string BomCode { get; set; } = string.Empty;
 
-        public string ProductCode { get; set; } = string.Empty; // Final Product Code
+        public int ProductId { get; set; } // Final Product Code
 
         public string CreatedBy { get; set; } = string.Empty;
 
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+
+        public int TotalProcessed { get; set; }
+
 
         public string? ApprovedBy { get; set; }
 
@@ -27,5 +31,8 @@ namespace ProductionPlanning.Core.Model
         public bool IsApproved { get; set; } = false;
 
         public virtual List<BomDetail> BomDetails { get; set; } = new List<BomDetail>();
+        [JsonIgnore]
+        public virtual Product? Product { get; set; }
     }
+
 }

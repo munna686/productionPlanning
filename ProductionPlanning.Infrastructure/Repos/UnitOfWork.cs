@@ -32,9 +32,9 @@ namespace ProductionPlanning.Infrastructure.Repos
             GC.SuppressFinalize(this);
         }
 
-        public int save()
+        public Task<int> save()
         {
-            return _context.SaveChanges();
+            return _context.SaveChangesAsync();
         }
         protected virtual void Dispose(bool disposing)
         {

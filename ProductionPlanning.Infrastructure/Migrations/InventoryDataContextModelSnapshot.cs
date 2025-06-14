@@ -265,12 +265,14 @@ namespace ProductionPlanning.Infrastructure.Migrations
                     b.Property<int?>("BomMasterBomId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MaterialCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("RawMaterialMaterialId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
@@ -283,7 +285,38 @@ namespace ProductionPlanning.Infrastructure.Migrations
 
                     b.HasIndex("BomMasterBomId");
 
+                    b.HasIndex("RawMaterialMaterialId");
+
                     b.ToTable("BomDetails");
+                });
+
+            modelBuilder.Entity("ProductionPlanning.Core.Model.BomLog", b =>
+                {
+                    b.Property<int>("BomLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BomLogId"));
+
+                    b.Property<DateTime>("EndingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StartedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isFinished")
+                        .HasColumnType("bit");
+
+                    b.HasKey("BomLogId");
+
+                    b.ToTable("BomLogs");
                 });
 
             modelBuilder.Entity("ProductionPlanning.Core.Model.BomMaster", b =>
@@ -314,11 +347,15 @@ namespace ProductionPlanning.Infrastructure.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalProcessed")
+                        .HasColumnType("int");
 
                     b.HasKey("BomId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("BomMasters");
                 });
@@ -455,7 +492,24 @@ namespace ProductionPlanning.Infrastructure.Migrations
                         .WithMany("BomDetails")
                         .HasForeignKey("BomMasterBomId");
 
+                    b.HasOne("ProductionPlanning.Core.Model.RawMaterial", "RawMaterial")
+                        .WithMany()
+                        .HasForeignKey("RawMaterialMaterialId");
+
                     b.Navigation("BomMaster");
+
+                    b.Navigation("RawMaterial");
+                });
+
+            modelBuilder.Entity("ProductionPlanning.Core.Model.BomMaster", b =>
+                {
+                    b.HasOne("ProductionPlanning.Core.Model.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ProductionPlanning.Core.Model.BomMaster", b =>

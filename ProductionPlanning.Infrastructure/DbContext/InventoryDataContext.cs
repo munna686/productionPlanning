@@ -18,6 +18,7 @@ namespace ProductionPlanning.Infrastructure.DbContext
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<BomDetail> BomDetails { get; set; }
         public DbSet<BomMaster> BomMasters { get; set; }
+        public DbSet<BomLog> BomLogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

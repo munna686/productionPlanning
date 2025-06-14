@@ -19,6 +19,11 @@ namespace ProductionPlanning.Infrastructure.Repos
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<ApplicationUser?> FindById(string Id)
+        {
+            return await _userManager.FindByIdAsync(Id);
+        }
+
         public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);

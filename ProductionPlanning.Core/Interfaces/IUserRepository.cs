@@ -11,5 +11,6 @@ namespace ProductionPlanning.Core.Interfaces
     {
         Task<ApplicationUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
+        public Task<ApplicationUser?> FindById(string Id);
     }
 }

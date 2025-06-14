@@ -7,7 +7,7 @@ using ProductionPlanning.Utility;
 
 namespace ProductionPlanning.Controllers
 {
-    [Route("api/account/users")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -27,12 +27,10 @@ namespace ProductionPlanning.Controllers
         [Authorize]
         public async Task<IActionResult> GetAllUser()
             => this.CustomApiResponse(await userService.getAllUser());
+        [HttpPut("edit")]
         [Authorize]
-        [HttpGet("ping")]
-        public IActionResult Ping()
-        {
-            return Ok("API is alive");
-        }
+        public async Task<IActionResult> UpdateUser(UpdateUserDTO dto) 
+            => this.CustomApiResponse(await userService.UpdateUser(dto));
 
     }
 }

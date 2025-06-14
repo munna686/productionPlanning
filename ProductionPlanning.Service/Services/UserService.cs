@@ -92,5 +92,18 @@ namespace ProductionPlanning.Service.Services
             var data = await unitOfWork.User.GetAll();
             return ResponseUtility.SendGetAllResponce(data);
         }
+
+        public async Task<ServiceResponse> UpdateUser(UpdateUserDTO user)
+        {
+            if (user == null) return ResponseUtility.SendFailResponce("Invalid Data");
+            var exist = await unitOfWork.User.FindById(user.Id);
+            if(exist is null) return ResponseUtility.SendFailResponce("Invalid Data");
+            exist.FullName = user.FirstName + " " + user.LastName;
+            exist.PhoneNumber = user.PhoneNumber;
+            exist.Email = user.Email;
+            unitOfWork.User.Update(exist);
+            await unitOfWork.save();
+            return ResponseUtility.SendUpdateResponce(exist);
+        }
     }
 }

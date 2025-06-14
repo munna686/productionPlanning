@@ -45,7 +45,7 @@ namespace ProductionPlanning.Infrastructure.ServiceExtention
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IJwtService, JwtService>();
-
+            services.AddScoped<IBomService, BomService>();
             // Add Authentication and JWT Configuration
             // Add Authentication with JWT Bearer
             var jwtSettings = configuration.GetSection("Jwt");

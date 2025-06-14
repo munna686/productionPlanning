@@ -9,5 +9,6 @@ namespace ProductionPlanning.Core.Interfaces
 {
     public interface IBomRepository : IGenericRepository<BomMaster>
     {
+        Task<string> GenerateNextBomCodeAsync();
     }
 }

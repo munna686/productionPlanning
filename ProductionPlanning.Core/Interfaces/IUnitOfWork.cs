@@ -16,6 +16,6 @@ namespace ProductionPlanning.Core.Interfaces
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();
         Task RollbackAsync();
-        int save();
+        Task<int>save();
     }
 }

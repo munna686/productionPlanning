@@ -13,5 +13,6 @@ namespace ProductionPlanning.Service.Interface
         Task<ServiceResponse> getAllUser();
         Task<ServiceResponse> Logout();
         Task<ServiceResponse> CreateUser(AddUserDTO dto);
+        Task<ServiceResponse> UpdateUser(UpdateUserDTO user);
     }
 }
