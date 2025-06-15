@@ -13,6 +13,7 @@ namespace ProductionPlanning.Core.Interfaces
         public IProductRepository Product { get; }
         public IRawMaterialRepository Material { get; }
         public IUserRepository User { get; }
+        
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();
         Task RollbackAsync();

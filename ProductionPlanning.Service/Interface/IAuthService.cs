@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace ProductionPlanning.Service.Interface
 {
-    public interface IUserService
+    public interface IAuthService
     {
-        
-        Task<ServiceResponse> getAllUser();
-        Task<ServiceResponse> CreateUser(AddUserDTO dto);
-        Task<ServiceResponse> UpdateUser(UpdateUserDTO user);
+        Task<AuthResponseDTO> Login(LoginDTO dto);
+        Task<ServiceResponse> Logout();
     }
 }

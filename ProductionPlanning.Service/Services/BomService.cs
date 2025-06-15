@@ -146,5 +146,28 @@ namespace ProductionPlanning.Service.Services
             return ResponseUtility.SendSuccessResponce(bom);
         }
 
+        public async Task<ServiceResponse> getEligibleBomsForProd()
+        {
+            var boms = await unitOfWork.Bom.GetAllQueryable().Where(b => b.IsApproved == true).ToListAsync();
+            return ResponseUtility.SendGetAllResponce(boms);
+        }
+        public async Task<ServiceResponse> startBomForProd(int bomId)
+        {
+            var user = currentUserService.getCurrentUser();
+            var bom = await unitOfWork.Bom.GetById(bomId);
+            bom.TotalProcessed += 1;
+
+            BomLog bomLog = new BomLog
+            {
+                BomId = bom.BomId,
+                StartedBy = user.FullName,
+                StartingTime = DateTime.Now,
+                isFinished = false,
+                isActive = true
+            };
+            unitOfWork
+
+        }
+
     }
 }

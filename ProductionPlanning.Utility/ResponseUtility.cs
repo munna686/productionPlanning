@@ -36,7 +36,7 @@ namespace ProductionPlanning.Utility
             {
                 AccessToken = null,
                 RefreshToken = null,
-                UserName = dto.Email, // অথবা null
+                UserName = dto.Email, 
             };
         }
 
