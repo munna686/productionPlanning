@@ -55,7 +55,7 @@ namespace ProductionPlanning.Service.Services
 
         }
 
-        public async Task<ServiceResponse> Login(LoginDTO dto)
+        public async Task<AuthResponseDTO> Login(LoginDTO dto)
         {
             var user = await unitOfWork.User.FindByEmailAsync(dto.Email);
             if (user == null) return ResponseUtility.SendLoginFail(dto);
@@ -77,8 +77,17 @@ namespace ProductionPlanning.Service.Services
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 UserName = user.UserName,
+                CurrentUser = new CurrentUserDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    Role = user.Role
+                }
+                
             };
-            return ResponseUtility.SendLoginSuccess(response);
+            return response;
         }
 
         public async Task<ServiceResponse> Logout()

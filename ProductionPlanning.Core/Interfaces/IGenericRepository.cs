@@ -10,6 +10,7 @@ namespace ProductionPlanning.Core.Interfaces
     {
         Task<T> GetById(int id);
         Task<IEnumerable<T>> GetAll();
+        IQueryable<T> GetAllQueryable();
         Task Add(T entity);
         void Delete(T entity);
         void Update(T entity);

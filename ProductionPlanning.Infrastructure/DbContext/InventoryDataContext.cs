@@ -25,5 +25,15 @@ namespace ProductionPlanning.Infrastructure.DbContext
             if (!optionsBuilder.IsConfigured)
                 optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PPDB;User ID=sa;Password=68662;TrustServerCertificate=true;");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BomDetail>()
+                .HasOne(d => d.BomMaster)
+                .WithMany(m => m.BomDetails)
+                .HasForeignKey(d => d.BomId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

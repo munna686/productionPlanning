@@ -23,6 +23,8 @@ namespace ProductionPlanning.Core.Model
 
         public int TotalProcessed { get; set; }
 
+        public string UpdatedBy {  get; set; } = string.Empty;
+        public DateTime UpdatedOn { get; set; }
 
         public string? ApprovedBy { get; set; }
 

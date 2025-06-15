@@ -4,6 +4,7 @@ using ProductionPlanning.Core.DTOs;
 using ProductionPlanning.Core.Model;
 using ProductionPlanning.Service.Interface;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace ProductionPlanning.Service.Services
 {
@@ -32,6 +33,16 @@ namespace ProductionPlanning.Service.Services
                 Email = user.Email,
                 Role = roles.FirstOrDefault(),
             };
+        }
+        public CurrentUserDto getCurrentUser()
+        {
+            var UserJson = _contextAccessor.HttpContext?.Request.Cookies["CurrentUser"];
+            if(!string.IsNullOrEmpty(UserJson))
+            {
+                var currentUser = JsonSerializer.Deserialize<CurrentUserDto>(UserJson);
+                return currentUser;
+            }
+            return null;
         }
     }
 }

@@ -30,6 +30,16 @@ namespace ProductionPlanning.Utility
             return serviceResponse;
         }
 
+        public static AuthResponseDTO SendLoginFail(LoginDTO dto)
+        {
+            return new AuthResponseDTO
+            {
+                AccessToken = null,
+                RefreshToken = null,
+                UserName = dto.Email, // অথবা null
+            };
+        }
+
         public static ServiceResponse SendUpdateResponce(this object responseData)
         {
             ServiceResponse serviceResponse = new ServiceResponse();

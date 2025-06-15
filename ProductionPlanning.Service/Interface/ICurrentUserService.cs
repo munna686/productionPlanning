@@ -10,5 +10,6 @@ namespace ProductionPlanning.Service.Interface
     public interface ICurrentUserService
     {
         Task<CurrentUserDto?> GetCurrentUserAsync();
+        CurrentUserDto getCurrentUser();
     }
 }

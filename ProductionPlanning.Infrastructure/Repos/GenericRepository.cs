@@ -33,6 +33,11 @@ namespace ProductionPlanning.Infrastructure.Repos
             return await this.context.Set<T>().ToListAsync();
         }
 
+        public IQueryable<T> GetAllQueryable()
+        {
+            return this.context.Set<T>();
+        }
+
         public async Task<T> GetById(int id)
         {
             var result = await this.context.Set<T>().FindAsync(id);

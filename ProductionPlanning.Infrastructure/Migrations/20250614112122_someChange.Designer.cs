@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductionPlanning.Infrastructure.DbContext;
 
@@ -11,9 +12,11 @@ using ProductionPlanning.Infrastructure.DbContext;
 namespace ProductionPlanning.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryDataContext))]
-    partial class InventoryDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250614112122_someChange")]
+    partial class someChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,6 +265,9 @@ namespace ProductionPlanning.Infrastructure.Migrations
                     b.Property<int>("BomId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BomMasterBomId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaterialId")
                         .HasColumnType("int");
 
@@ -280,48 +286,11 @@ namespace ProductionPlanning.Infrastructure.Migrations
 
                     b.HasKey("BomDetailId");
 
-                    b.HasIndex("BomId");
+                    b.HasIndex("BomMasterBomId");
 
                     b.HasIndex("RawMaterialMaterialId");
 
                     b.ToTable("BomDetails");
-                });
-
-            modelBuilder.Entity("ProductionPlanning.Core.Model.BomLog", b =>
-                {
-                    b.Property<int>("BomLogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BomLogId"));
-
-                    b.Property<int>("BomId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BomMasterBomId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndingTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StartedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartingTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("isActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isFinished")
-                        .HasColumnType("bit");
-
-                    b.HasKey("BomLogId");
-
-                    b.HasIndex("BomMasterBomId");
-
-                    b.ToTable("BomLogs");
                 });
 
             modelBuilder.Entity("ProductionPlanning.Core.Model.BomMaster", b =>
@@ -357,13 +326,6 @@ namespace ProductionPlanning.Infrastructure.Migrations
 
                     b.Property<int>("TotalProcessed")
                         .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("BomId");
 
@@ -502,9 +464,7 @@ namespace ProductionPlanning.Infrastructure.Migrations
                 {
                     b.HasOne("ProductionPlanning.Core.Model.BomMaster", "BomMaster")
                         .WithMany("BomDetails")
-                        .HasForeignKey("BomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BomMasterBomId");
 
                     b.HasOne("ProductionPlanning.Core.Model.RawMaterial", "RawMaterial")
                         .WithMany()
@@ -513,15 +473,6 @@ namespace ProductionPlanning.Infrastructure.Migrations
                     b.Navigation("BomMaster");
 
                     b.Navigation("RawMaterial");
-                });
-
-            modelBuilder.Entity("ProductionPlanning.Core.Model.BomLog", b =>
-                {
-                    b.HasOne("ProductionPlanning.Core.Model.BomMaster", "BomMaster")
-                        .WithMany()
-                        .HasForeignKey("BomMasterBomId");
-
-                    b.Navigation("BomMaster");
                 });
 
             modelBuilder.Entity("ProductionPlanning.Core.Model.BomMaster", b =>
