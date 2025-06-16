@@ -40,12 +40,14 @@ namespace ProductionPlanning.Infrastructure.ServiceExtention
             services.AddScoped<IBomRepository, BomRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
+            services.AddScoped<IBomLogRepository, BomLogRepository>();
 
             //Add Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IBomService, BomService>();
+            services.AddScoped<IAuthService, AuthService>();
             // Add Authentication and JWT Configuration
             // Add Authentication with JWT Bearer
             var jwtSettings = configuration.GetSection("Jwt");

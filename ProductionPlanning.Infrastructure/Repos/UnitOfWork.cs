@@ -17,13 +17,17 @@ namespace ProductionPlanning.Infrastructure.Repos
         public IProductRepository Product { get; }
         public IRawMaterialRepository Material { get; }
         public IUserRepository User { get; }
-        public UnitOfWork( InventoryDataContext context, IBomRepository bom, IProductRepository product, IRawMaterialRepository material, IUserRepository user)
+        public IBomLogRepository BomLog { get; }
+        public UnitOfWork( InventoryDataContext context, IBomRepository bom, 
+            IProductRepository product, IRawMaterialRepository material, 
+            IUserRepository user, IBomLogRepository bomLog)
         {
             _context = context;
             Bom = bom;
             Product = product;
             Material = material;
             User = user;
+            BomLog = bomLog;
         }
 
         public void Dispose()

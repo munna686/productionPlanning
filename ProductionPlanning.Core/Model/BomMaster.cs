@@ -16,6 +16,7 @@ namespace ProductionPlanning.Core.Model
         public string BomCode { get; set; } = string.Empty;
 
         public int ProductId { get; set; } // Final Product Code
+        public int OutputQuantiy { get; set; } = 0;
 
         public string CreatedBy { get; set; } = string.Empty;
 

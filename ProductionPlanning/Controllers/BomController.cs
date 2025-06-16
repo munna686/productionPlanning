@@ -38,5 +38,25 @@ namespace ProductionPlanning.Controllers
         [Authorize]
         public async Task<IActionResult> ApprovedBom(int bomId)
             => this.CustomApiResponse(await service.ApproveBom(bomId));
+        [HttpPost("start/bom")]
+        [Authorize]
+        public async Task<IActionResult> StartBom(int bomId,string Remarks)
+            => this.CustomApiResponse(await service.startBomForProd(bomId,Remarks));
+        [HttpPut("finish/bom")]
+        [Authorize]
+        public async Task<IActionResult> FinishBom(int bomId)
+            => this.CustomApiResponse(await service.FinishBom(bomId));
+
+        [HttpPut("cancel/bom")]
+        [Authorize]
+        public async Task<IActionResult> cancel(int bomlogid)
+            => this.CustomApiResponse(await service.CancelBom(bomlogid));
+
+        [HttpGet("running")]
+        [Authorize]
+        public async Task<IActionResult> getAllRunningTask()
+            => this.CustomApiResponse(await service.getAllRunningBoms());
+        
+
     }
 }

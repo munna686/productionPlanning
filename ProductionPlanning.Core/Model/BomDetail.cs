@@ -15,11 +15,9 @@ namespace ProductionPlanning.Core.Model
 
         public int MaterialId { get; set; } 
 
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public string UOM { get; set; } = string.Empty;
-
-        public string? Remarks { get; set; }
         [JsonIgnore]
         public virtual BomMaster? BomMaster { get; set; }
         [JsonIgnore]

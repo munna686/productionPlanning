@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductionPlanning.Infrastructure.DbContext;
 
@@ -11,9 +12,11 @@ using ProductionPlanning.Infrastructure.DbContext;
 namespace ProductionPlanning.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryDataContext))]
-    partial class InventoryDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250616062521_upt")]
+    partial class upt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,13 +300,6 @@ namespace ProductionPlanning.Infrastructure.Migrations
 
                     b.Property<int?>("BomMasterBomId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CancelBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CaneledOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndingTime")
                         .HasColumnType("datetime2");
