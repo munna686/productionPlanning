@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ProductionPlanning.Core.Interfaces;
+using ProductionPlanning.Core.Model;
 using ProductionPlanning.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -19,8 +22,14 @@ namespace ProductionPlanning.Service.Services
         {
             _configuration = configuration;
         }
-        public string GenerateAccessToken(IEnumerable<Claim> claims)
+        public string GenerateAccessToken(ApplicationUser user)
         {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.Id),
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim (ClaimTypes.Role,user.Role)
+            };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
@@ -39,6 +48,7 @@ namespace ProductionPlanning.Service.Services
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
         }
+        
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {

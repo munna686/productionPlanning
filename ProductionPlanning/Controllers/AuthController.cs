@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductionPlanning.Core.DTOs;
+using ProductionPlanning.Infrastructure.Repos;
 using ProductionPlanning.Service.Interface;
 using ProductionPlanning.Utility;
 using System.Text.Json;
@@ -11,9 +12,11 @@ namespace ProductionPlanning.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService authService;
-        public AuthController(IAuthService authService)
+        private readonly IJwtService jwtService;
+        public AuthController(IAuthService authService,IJwtService jwtService)
         {
             this.authService = authService;
+            this.jwtService = jwtService;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO dto)
@@ -42,6 +45,25 @@ namespace ProductionPlanning.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut("refreshtoken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["RefreshToken"];
+            if(string.IsNullOrEmpty(refreshToken)) return Unauthorized("Invalid refreshToken");
+            var User = await authService.GetValidateRefreshToken(refreshToken);
+            if(User == null) return Unauthorized("Invalid or expired RefreshToken");
+
+            var tokens = await authService.RefreshToken(User);
+            Response.Cookies.Append("RefreshToken", tokens.NewRefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.Now.AddDays(7)
+            });
+            return Ok(new { AccessToken = tokens.NewAccessToken });
+        }
+
         [HttpGet("logout")]
         public async Task<IActionResult> LogOut()
         {

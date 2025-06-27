@@ -29,5 +29,9 @@ namespace ProductionPlanning.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
             => this.CustomApiResponse(await userService.UpdateUser(dto));
+
+        [HttpPut("inactive")]
+        public async Task<IActionResult> InActiveUser(string userId)
+            => this.CustomApiResponse(await userService.inActiveUser(userId));
     }
 }

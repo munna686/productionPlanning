@@ -18,4 +18,13 @@ namespace ProductionPlanning.Core.Model
         public string CreatedBy { get; set; } = string.Empty;
         public DateTime CreatedOn { get; set; } = DateTime.Now;
     }
+    public class AddProductDto
+    {
+        public string ProductName { get; set; } = string.Empty;
+        public decimal UnitPrice { get; set; }
+        public decimal CostPrice { get; set; }
+        public string PackSize { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public int StockQty { get; set; }
+    }
 }

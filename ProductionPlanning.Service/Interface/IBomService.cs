@@ -20,5 +20,6 @@ namespace ProductionPlanning.Service.Interface
         Task<ServiceResponse> getAllRunningBoms();
         Task<ServiceResponse> FinishBom(int bomLogId);
         Task<ServiceResponse> CancelBom(int BomLogId);
+        Task<ServiceResponse> getAllBoms();
     }
 }

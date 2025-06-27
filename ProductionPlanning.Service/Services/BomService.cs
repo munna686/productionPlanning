@@ -207,8 +207,9 @@ namespace ProductionPlanning.Service.Services
             {
                 var user = currentUserService.getCurrentUser();
                 var bomlog = await unitOfWork.BomLog.GetById(BomLogId);
+                if (bomlog.isFinished && bomlog.isActive) return ResponseUtility.SendFailResponce("Can't cancel finished bom");
                 var bom = await unitOfWork.Bom.GetAllQueryable().Where(a => a.BomId == bomlog.BomId).Include(d => d.BomDetails).FirstOrDefaultAsync();
-                if (bomlog.isFinished) return ResponseUtility.SendFailResponce("Can't cancel finished bom");
+                
                 //rollback bomdetails product
                 foreach (var detail in bom.BomDetails)
                 {
@@ -221,6 +222,7 @@ namespace ProductionPlanning.Service.Services
                 }
                 bomlog.CancelBy = user.FullName;
                 bomlog.CaneledOn = DateTime.Now;
+                bomlog.isActive = false;
                 await unitOfWork.save();
                 await unitOfWork.CommitAsync();
                 return ResponseUtility.SendSuccessResponce(bomlog);
@@ -236,6 +238,11 @@ namespace ProductionPlanning.Service.Services
         public async Task<ServiceResponse> getAllRunningBoms()
         {
             var data = await unitOfWork.BomLog.GetAllQueryable().Where(b => b.isFinished == false && b.isActive == true).ToListAsync();
+            return ResponseUtility.SendGetAllResponce(data);
+        }
+        public async Task<ServiceResponse> getAllBoms()
+        {
+            var data = await unitOfWork.BomLog.GetAllQueryable().Where(b =>b.isActive == true).ToListAsync();
             return ResponseUtility.SendGetAllResponce(data);
         }
 

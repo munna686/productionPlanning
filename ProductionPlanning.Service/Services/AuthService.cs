@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProductionPlanning.Core.DTOs;
 using ProductionPlanning.Core.Interfaces;
 using ProductionPlanning.Core.Model;
@@ -32,13 +33,8 @@ namespace ProductionPlanning.Service.Services
             if (user == null) return ResponseUtility.SendLoginFail(dto);
             var success = await unitOfWork.User.CheckPasswordAsync(user, dto.Password);
             if (!success) return ResponseUtility.SendLoginFail(dto);
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier,user.Id),
-                new Claim(ClaimTypes.Name,user.UserName),
-                new Claim (ClaimTypes.Role,user.Role)
-            };
-            var accessToken = _jwtService.GenerateAccessToken(claims);
+            
+            var accessToken = _jwtService.GenerateAccessToken(user);
             var refreshToken = _jwtService.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
@@ -60,6 +56,26 @@ namespace ProductionPlanning.Service.Services
             };
             return response;
         }
+
+        public async Task<ApplicationUser> GetValidateRefreshToken(string refreshToken)
+        {
+            var data = await unitOfWork.User.GetAllQueryable().Where(r => r.RefreshToken == refreshToken && r.RefreshTokenExpiryTime > DateTime.Now).FirstOrDefaultAsync();
+            return data;
+        }
+
+        public async Task<TokenResponseDTO> RefreshToken(ApplicationUser user)
+        {
+            var accessToken = _jwtService.GenerateAccessToken(user);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            await _userManager.UpdateAsync(user);
+            return new TokenResponseDTO
+            {
+                NewAccessToken = accessToken,
+                NewRefreshToken = refreshToken
+            };
+        } 
 
         public async Task<ServiceResponse> Logout()
         {

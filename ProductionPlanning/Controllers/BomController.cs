@@ -54,8 +54,11 @@ namespace ProductionPlanning.Controllers
 
         [HttpGet("running")]
         [Authorize]
-        public async Task<IActionResult> getAllRunningTask()
+        public async Task<IActionResult> getAllRunningBom()
             => this.CustomApiResponse(await service.getAllRunningBoms());
+        [HttpGet("all/boms")]
+        public async Task<IActionResult> getAllBoms()
+            => this.CustomApiResponse(await service.getAllBoms());
         
 
     }

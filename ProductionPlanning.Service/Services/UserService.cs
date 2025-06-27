@@ -75,5 +75,14 @@ namespace ProductionPlanning.Service.Services
             await unitOfWork.save();
             return ResponseUtility.SendUpdateResponce(exist);
         }
+
+        public async Task<ServiceResponse> inActiveUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return ResponseUtility.SendFailResponce("User does not exist");
+            user.IsActive = false;
+            await _userManager.UpdateAsync(user);
+            return ResponseUtility.SendSuccessResponce(user);
+        }
     }
 }

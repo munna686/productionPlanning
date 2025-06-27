@@ -1,4 +1,5 @@
 ﻿using ProductionPlanning.Core.DTOs;
+using ProductionPlanning.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace ProductionPlanning.Service.Interface
     {
         Task<AuthResponseDTO> Login(LoginDTO dto);
         Task<ServiceResponse> Logout();
+        Task<ApplicationUser> GetValidateRefreshToken(string refreshToken);
+        Task<TokenResponseDTO> RefreshToken(ApplicationUser user);
     }
 }
